@@ -21,6 +21,13 @@ class User extends Model {
     })
   }
 
+  /**
+   * Oculta os campos definidos no retorno, das queries no DB
+   */
+  static get hidden(){
+    return ['password']
+  }
+
   static get traits () {
     return [
       '@provider:Adonis/Acl/HasRole',
@@ -40,6 +47,16 @@ class User extends Model {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
+
+  image() {
+    return this.belongsTo('App/Models/Image')
+  }
+
+  coupons(){
+    return this.belongsTo('App/Models/Coupon')
+  }
+
+  
 }
 
 module.exports = User
