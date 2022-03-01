@@ -20,3 +20,4 @@ class UserImageFkSchema extends Schema {
 }
 
 module.exports = UserImageFkSchema
+ 
