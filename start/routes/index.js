@@ -30,3 +30,8 @@ require('./auth')
  * Importa as rotas de Admin
  */
 require('./admin')
+
+/**
+ * Importa as rotas de Clientes
+ */
+require('./client')
