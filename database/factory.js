@@ -14,7 +14,8 @@ const Factory = require('@adonisjs/lucid/src/Factory')
 */
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
-// const Factory = use('Factory')
+const Factory = use('Factory')
+
 Factory.blueprint('App/Models/User', faker => {
     return{
       name: faker.first(),
@@ -32,7 +33,7 @@ Factory.blueprint('App/Models/Category', faker => {
     }
 })
 
-Faker.blueprint('App/Models/Product', faker => {
+Factory.blueprint('App/Models/Product', faker => {
     return{
         name: faker.animal(),
         description: faker.sentence(),
