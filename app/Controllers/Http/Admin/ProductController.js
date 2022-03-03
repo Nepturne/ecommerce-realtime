@@ -3,7 +3,7 @@
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
-
+const Product = use('App/Models/Product')
 /**
  * Resourceful controller for interacting with products
  */
@@ -17,7 +17,16 @@ class ProductController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, pagination }) {
+    const name = request.input('name')
+    const query = Product.query()
+
+    if(name){
+      query.where('name', 'LIKE', `%${name}%`)
+    }
+
+    const products = await query.paginate(pagination.page, pagination.limit)
+    return response.send(products)
   }
 
 
@@ -30,6 +39,15 @@ class ProductController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    
+    try {
+      const { name, description, price , image_id } = request.all()
+      const product = await Product.create({ name ,description , price , image_id })
+      return response.status(201).send(product)
+    } catch (error) {
+      response.status(400).send({ message: 'Não foi possível criar o produto neste momento!' })
+    }
+    
   }
 
   /**
