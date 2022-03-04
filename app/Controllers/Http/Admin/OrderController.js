@@ -8,6 +8,7 @@ const Database = require('@adonisjs/lucid/src/Database')
 
 const Order = use('App/Models/Order')
 const Database  = use('Database')
+const Service = use('App/Services/Order/OrderService')
 /**
  * Resourceful controller for interacting with orders
  */
@@ -48,6 +49,25 @@ class OrderController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    const trx = await Database.beginTransaction()
+    
+    try {
+      const { user_id , item, status}  = request.all()
+      let order = await Order.create({use_id, status}, trx)
+      const service = new Service(order, trx)
+
+      if(items && items.length > 0){
+        await Service.syncItems(itemss)
+      }
+      await trx.commit()
+      return response.status(201).send(order)
+    } catch (error) {
+      await trx.rollback()
+      return response.status(400).send({
+        message: 'Não foi possível criar o pedido no momento!'
+      })
+    }
+
   }
 
   /**
