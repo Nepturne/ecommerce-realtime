@@ -5,7 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Image = use('App/Models/Image')
-const { manage_single_upload } = use('App/Helpers')
+const { manage_single_upload , manage_multiple_uploads } = use('App/Helpers')
 /**
  * Resourceful controller for interacting with images
  */
@@ -45,7 +45,6 @@ class ImageController {
       // retorno pro usuário
       let images = []
       //caso seja um único arquivo - manage_single_upload
-      //caso sejam vários arquivos - manage_multiple_uploads
       if(!fileJar.files){
         const file = await manage_single_upload(fileJar)
         if(file.moved()){
@@ -61,9 +60,38 @@ class ImageController {
 
           return response.status(201).send({success: images, errors: {} })
         }
+
+        return response.status(400).send({
+          message: 'Não foi possível processar esta imagem no momento!'
+        })
+
       }
+      //caso sejam vários arquivos - manage_multiple_uploads
+      let files = await manage_multiple_uploads(fileJar)
+
+      await Promise.all(
+        
+        files.successes.map(async file => {
+          const image = await Image.create({
+            path: file.fileName,
+            size: file.size,
+            original_name: file.clientName,
+            extension: file.subtype
+          })
+          images.push(image)
+        })
+
+      )
+    
+      return response
+        .status(201)
+        .send({ successes: images , errors: files.error })
     } catch (error) {
-      
+     
+      return response.status(400).send({
+        message: 'Não foi possível processar a sua solicitação!'
+      })
+
     }
   }
 
