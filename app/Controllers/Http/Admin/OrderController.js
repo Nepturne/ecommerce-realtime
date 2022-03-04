@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
+const Order = use('App/Models/Order')
 /**
  * Resourceful controller for interacting with orders
  */
@@ -18,6 +19,7 @@ class OrderController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    
   }
 
   /**
