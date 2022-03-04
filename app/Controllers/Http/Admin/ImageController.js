@@ -1,11 +1,14 @@
 'use strict'
 
+const Helpers = require('@adonisjs/ignitor/src/Helpers')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Image = use('App/Models/Image')
 const { manage_single_upload , manage_multiple_uploads } = use('App/Helpers')
+const fs = use('fs')
 /**
  * Resourceful controller for interacting with images
  */
@@ -104,20 +107,11 @@ class ImageController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show ({ params: { id }, request, response, view }) {
+    const image = await Image.findOrFail(id)
+    return response.send(image)
   }
 
-  /**
-   * Render a form to update an existing image.
-   * GET images/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update image details.
@@ -127,7 +121,22 @@ class ImageController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params: { id }, request, response }) {
+    const image = await Image.findOrFail(id)
+
+    try {
+      image.merge(request.only(['original_name']))
+      await image.save()
+      response.status(200).send(image)
+    } catch (error) {
+      
+      return response.status(400).send({
+        message: 'Não foi possível atualizar esta imagem no momento!'
+      })
+
+    }
+
+
   }
 
   /**
@@ -138,7 +147,24 @@ class ImageController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy ({ params: {id}, request, response }) {
+    const image = await Image.findOrFail(id)
+    try {
+      let filepath = Helpers.publicPath(`uploads/${image.path}`)
+      
+      await fs.unlink(filepath, err => {
+        if(!err)
+        await image.delete()
+      })
+
+      return response.status(204).send()
+    } catch (error) {
+      
+      return response.status(400).send({
+        message: 'Não foi possível deletar a imagem no momento!'
+      })
+
+    }
   }
 }
 
