@@ -107,7 +107,7 @@ class OrderController {
     } catch (error) {
       await trx.rollback()
       return response.status(400).send({
-        message: 'Não foi possível realizar este pedido no momento!'
+        message: 'Não foi possível atualizar este pedido no momento!'
       })
     }
   }

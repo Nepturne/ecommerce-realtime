@@ -1,6 +1,7 @@
 'use strict'
 
 const { TIMESTAMP } = require("mysql/lib/protocol/constants/types")
+const Database = use('Database')
 
 class OrderService {
     constructor(model, trx=false){
@@ -36,6 +37,9 @@ class OrderService {
     }
 
     
+    async canApplyDiscount(coupon){
+        const couponProducts = await Database.from('coupon_products').where('coupon_id', coupon.id).pluck('product_id')
+    }
 
 } 
 
