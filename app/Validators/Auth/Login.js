@@ -8,6 +8,7 @@ class Login {
       password: 'required'
     }
   }
+
 }
 
 module.exports = Login
