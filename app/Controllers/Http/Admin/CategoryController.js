@@ -5,7 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 const Category = use('App/Models/Category')
-
+const Transformer = use('App/Transformers/Admin/CategoryTransformer')
 /**
  * Resourceful controller for interacting with categories
  */
@@ -17,17 +17,18 @@ class CategoryController {
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
-   * @param {View} ctx.view
+   * @param {TransformWith} ctx.transform
    * @param {Object} ctx.pagination
    */
-  async index ({ request, response, view , pagination }) {
+  async index ({ request, response, transform , pagination }) {
     const title  = request.input('title')
     const query = Category.query()
     if(title){
       query.where('title', 'LIKE', `%${title}%`)
     }
     
-    const categories = await query.paginate( pagination.page,  pagination.limit)
+    var categories = await query.paginate( pagination.page,  pagination.limit)
+    categories = await transform.paginate(categories, Transformer)
     return response.send(categories)
   }
 
