@@ -43,7 +43,10 @@ Route.group(() => {
      /**
      *  User Resource routes
      */
-      Route.resource('users', 'UserController').apiOnly() 
+      Route.resource('users', 'UserController').apiOnly().validator([
+        [['users.store'], ['Admin/StoreUser']],
+        [['users.update'], ['Admin/StoreUser']]
+      ])
 
 
 })
