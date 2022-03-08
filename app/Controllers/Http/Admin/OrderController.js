@@ -24,7 +24,7 @@ class OrderController {
    * @param {Response} ctx.response
    * @param { object } ctx.paginate
    */
-  async index ({ request, response, paginate }) {
+  async index ({ request, response, pagination }) {
     const { status, id } = request.only(['status','id'])
     const query = Order.query()
 
@@ -38,7 +38,7 @@ class OrderController {
     }
 
 
-    const orders = query.paginate(paginate.page, paginate.limit)
+    const orders = await query.paginate(pagination.page, pagination.limit)
     return response.send(orders)
   }
 
