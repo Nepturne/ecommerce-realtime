@@ -28,7 +28,22 @@ class OrderTransformer extends TransformerAbstract {
     }
   }
 
-  
+  includeUser(order){
+    return this.item(order.getRelated('user'), UserTransformer)
+  }
+
+  includeItems(order){
+    return this.item(order.getRelated('items'), OrderItemTransformer)
+  }
+
+  includeCoupons(order){
+    return this.item(order.getRelated('coupons'), CouponTransformer)
+  }
+
+  includeDiscounts(order){
+    return this.item(order.getRelated('discount'), DiscountTransformer)
+  }
 }
+
 
 module.exports = OrderTransformer
