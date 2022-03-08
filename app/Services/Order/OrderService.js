@@ -89,7 +89,7 @@ class OrderService {
             }
 
             /**
-             * Caso de uso 3 - O cupom está associado a um ou mais clientes e nenhum produto
+             * Caso de uso 3 - O cupom está associado a um ou mais clientes e (nenhum produto)
              */
             if(isAssociatedToClients && Array.isArray(couponClients) && couponClients.length > 0){
                 const match = couponClients.find(client => client === this.model.user_id)
