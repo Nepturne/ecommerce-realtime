@@ -1,6 +1,7 @@
 'use strict'
 
-const BumblebeeTransformer = use('Bumblebee/Transformer')
+
+const TransformerAbstract = use('Adonis/Addons/Bumblebee/TransformerAbstract')
 
 /**
  * ImageTransformer class
@@ -8,7 +9,7 @@ const BumblebeeTransformer = use('Bumblebee/Transformer')
  * @class ImageTransformer
  * @constructor
  */
-class ImageTransformer extends BumblebeeTransformer {
+class ImageTransformer extends TransformerAbstract {
   /**
    * This method is used to transform the data.
    */

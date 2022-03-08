@@ -8,7 +8,7 @@ const ImageTransformer = use('App/Transformers/Admin/ImageTransformer')
  * @class ProductTransformer
  * @constructor
  */
-class ProductTransformer extends BumblebeeTransformer {
+class ProductTransformer extends TransformerAbstract {
   defaultInclude(){
     return ['image']
   }
